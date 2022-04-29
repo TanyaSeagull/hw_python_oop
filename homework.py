@@ -69,7 +69,7 @@ class Running(Training):
         training_min = self.duration * 60
         spent_calories = (self.K_RUN_1 * self.get_mean_speed()
                           - self.K_RUN_2) * self.weight \
-                          / self.M_IN_KM * training_min
+                        / self.M_IN_KM * training_min
         return spent_calories
 
 
