@@ -51,10 +51,13 @@ class Training:
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        info_message = InfoMessage(self.__class__.__name__, self.duration,
-            self.get_distance(), self.get_mean_speed(), self.get_spent_calories())
+        info_message = InfoMessage(self.__class__.__name__, 
+                                   self.duration,
+                                   self.get_distance(),
+                                   self.get_mean_speed(),
+                                   self.get_spent_calories())
         return info_message
-    
+
 
 class Running(Training):
     """Тренировка: бег."""
@@ -65,7 +68,7 @@ class Running(Training):
         """Получить количество затраченных калорий."""
         training_min = self.duration * 60
         spent_calories = (self.K_RUN_1 * self.get_mean_speed()
-            - self.K_RUN_2) * self.weight / self.M_IN_KM * training_min
+                         - self.K_RUN_2) * self.weight / self.M_IN_KM * training_min
         return spent_calories
 
 
@@ -86,9 +89,9 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         training_min = self.duration * 60
-        spent_calories = (self.K_WLK_1 * self.weight +
-            (self.get_mean_speed()**2 // self.height) * self.K_WLK_2 * self.weight) \
-            * training_min
+        spent_calories = (self.K_WLK_1 * self.weight
+                         + (self.get_mean_speed()**2 // self.height)
+                         * self.K_WLK_2 * self.weight) * training_min
         return spent_calories
 
 
@@ -122,8 +125,8 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        spent_calories = (self.get_mean_speed() + self.K_SWM_1) * self.K_SWM_2 \
-            * self.weight
+        spent_calories = (self.get_mean_speed() + self.K_SWM_1) \
+                         * self.K_SWM_2 * self.weight
         return spent_calories
 
 
