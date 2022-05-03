@@ -92,7 +92,7 @@ class SportsWalking(Training):
         spent_calories = ((self.USER_WGHT__MULTIPLE_1 * self.weight_kg
                            + (self.get_mean_speed()**2 // self.height_m)
                            * self.USER_WGHT__MULTIPLE_2 * self.weight_kg)
-                           * training_min)
+                          * training_min)
         return spent_calories
 
 
