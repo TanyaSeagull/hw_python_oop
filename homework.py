@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -72,8 +73,8 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    USER_WEIGHT__MULTIPLE_1: float = 0.035
-    USER_WEIGHT__MULTIPLE_2: float = 0.029
+    USER_WGHT__MULTIPLE_1: float = 0.035
+    USER_WGHT__MULTIPLE_2: float = 0.029
     MIN_IN_HOUR: int = 60
 
     def __init__(self,
@@ -88,17 +89,17 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         training_min = self.duration_h * self.MIN_IN_HOUR
-        spent_calories = (self.USER_WEIGHT__MULTIPLE_1 * self.weight_kg
+        spent_calories = (self.USER_WGHT__MULTIPLE_1 * self.weight_kg
                           + (self.get_mean_speed()**2 // self.height_m)
-                          * self.USER_WEIGHT__MULTIPLE_2 * self.weight_kg) * training_min
+                          * self.USER_WGHT__MULTIPLE_2 * self.weight_kg) * training_min
         return spent_calories
 
 
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
-    MEAN_SPEED_SWM_MULTIPLE: float = 1.1
-    MEAN_SPEED_SWM_DEDUCTED: float = 2
+    SPEED_SWM_MULTIPLE: float = 1.1
+    SPEED_SWM_DEDUCTED: float = 2
 
     def __init__(self,
                  action: int,
@@ -124,8 +125,8 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        spent_calories = ((self.get_mean_speed() + self.MEAN_SPEED_SWM_MULTIPLE)
-                          * self.MEAN_SPEED_SWM_DEDUCTED * self.weight_kg)
+        spent_calories = ((self.get_mean_speed() + self.SPEED_SWM_MULTIPLE)
+                          * self.SPEED_SWM_DEDUCTED * self.weight_kg)
         return spent_calories
 
 
