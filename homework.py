@@ -16,7 +16,7 @@ class InfoMessage:
         'Дистанция: {distance:.3f} км; '
         'Ср. скорость: {speed:.3f} км/ч; '
         'Потрачено ккал: {calories:.3f}.')
-    
+
     def get_message(self):
         return self.TEMPLATE.format(**asdict(self))
 
@@ -136,8 +136,8 @@ class Swimming(Training):
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
     training_types = {'SWM': Swimming,
-                          'RUN': Running,
-                          'WLK': SportsWalking}
+                      'RUN': Running,
+                      'WLK': SportsWalking}
     if workout_type not in training_types:
         raise KeyError("Произошло что-то плохое!")
     return training_types[workout_type](*data)
