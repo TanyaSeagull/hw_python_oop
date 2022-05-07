@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 
 @dataclass
@@ -10,18 +10,22 @@ class InfoMessage:
     speed: float
     calories: float
 
-    def get_message(self) -> str:
-        return (f'Тип тренировки: {self.training_type}; '
-                f'Длительность: {self.duration:.3f} ч.; '
-                f'Дистанция: {self.distance:.3f} км; '
-                f'Ср. скорость: {self.speed:.3f} км/ч; '
-                f'Потрачено ккал: {self.calories:.3f}.')
+    TEMPLATE = (
+        'Тип тренировки: {training_type}; '
+        'Длительность: {duration:.3f} ч.; '
+        'Дистанция: {distance:.3f} км; '
+        'Ср. скорость: {speed:.3f} км/ч; '
+        'Потрачено ккал: {calories:.3f}.')
+    
+    def get_message(self):
+        return self.TEMPLATE.format(**asdict(self))
 
 
 class Training:
     """Базовый класс тренировки."""
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65
+    MIN_IN_HOUR: int = 60
 
     def __init__(self,
                  action: int,
@@ -60,7 +64,6 @@ class Running(Training):
     """Тренировка: бег."""
     MEAN_SPEED_MULTIPLE: int = 18
     MEAN_SPEED_DEDUCTED: int = 20
-    MIN_IN_HOUR: int = 60
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
@@ -73,9 +76,8 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    USER_WGHT__MULTIPLE_1: float = 0.035
-    USER_WGHT__MULTIPLE_2: float = 0.029
-    MIN_IN_HOUR: int = 60
+    USER_WGHT__MULTIPLE_FIRST: float = 0.035
+    USER_WGHT__MULTIPLE_SECOND: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -89,9 +91,9 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         training_min = self.duration_h * self.MIN_IN_HOUR
-        spent_calories = ((self.USER_WGHT__MULTIPLE_1 * self.weight_kg
+        spent_calories = ((self.USER_WGHT__MULTIPLE_FIRST * self.weight_kg
                            + (self.get_mean_speed()**2 // self.height_m)
-                           * self.USER_WGHT__MULTIPLE_2 * self.weight_kg)
+                           * self.USER_WGHT__MULTIPLE_SECOND * self.weight_kg)
                           * training_min)
         return spent_calories
 
@@ -133,12 +135,12 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    training_type_dict = {'SWM': Swimming,
+    training_types = {'SWM': Swimming,
                           'RUN': Running,
                           'WLK': SportsWalking}
-    if workout_type not in training_type_dict:
-        raise Exception("Произошло что-то плохое!")
-    return training_type_dict[workout_type](*data)
+    if workout_type not in training_types:
+        raise KeyError("Произошло что-то плохое!")
+    return training_types[workout_type](*data)
 
 
 def main(training: Training) -> None:
